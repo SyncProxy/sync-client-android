@@ -6,7 +6,7 @@ SyncProxy client for Android enables one-single line of code implementation of s
 ```
 $ git clone https://github.com/syncproxy/sync-client-android
 ```
-Then import the **SyncProxy.AAR** library file to your application project in Android Studio: **File/ New / New module... / Import .JAR/.AAR package**.
+Then import the **SyncClient.AAR** library file to your application project in Android Studio: **File/ New / New module... / Import .JAR/.AAR package**.
 # Example with SQLite
 The SyncProxy client is instanciated in the main activity's onCreate() handler:
 ```java
