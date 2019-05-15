@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.syncproxy.syncclient">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application>
+<!--        <activity android:name="com.syncproxy.syncclient.SyncClient" android:theme="@android:style/Theme.Translucent.NoTitleBar" ></activity> -->
+        <activity android:name="com.syncproxy.syncclient.SyncClient"/>
+        <activity android:name="com.syncproxy.syncclient.LoginFormActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+    </application>
+</manifest>

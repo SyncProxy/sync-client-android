@@ -1,0 +1,1 @@
+include ':SyncClient', ':java-android-websocket-client-1.2.0', ':design:27.1.1'

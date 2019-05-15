@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SyncClient</string>
+    <string name="goto_syncproxy">If you don\'t have a login yet, please go to <u>www.syncproxy.com</u> to signup and join or create a sync group.</string>
+</resources>
