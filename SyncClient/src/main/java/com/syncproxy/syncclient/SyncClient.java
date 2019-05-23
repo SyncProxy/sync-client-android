@@ -54,9 +54,7 @@ public class SyncClient extends Activity {
 //            {"utcDates", true}
     };
 
-    public enum LogLevel {info, warning, error, critical}
-
-    ;
+    public enum LogLevel {info, warning, error, critical};
 
     public enum Steps {
         Idle,
@@ -93,9 +91,7 @@ public class SyncClient extends Activity {
         Sync_OK,
         Sync_Auto,
         Sync_Error
-    }
-
-    ;
+    };
     public static Activity srcActivity;
     private static Boolean initDone = false;
     public BroadcastReceiver networkNotificationsReceiver;
@@ -118,13 +114,13 @@ public class SyncClient extends Activity {
         ClientReactiveSync,
         ServerReactiveSync,
         FullSync
-    }
-
+    };
     private SyncType syncType = SyncType.FullSync;
+    public static Runnable onSyncEnd = null;
 
     public SyncClient() {
         defaultClient = this;
-    }
+    };
 
     ////////////////////////////////////////////
     // Launch sync client from other activity //
@@ -476,7 +472,7 @@ public class SyncClient extends Activity {
         return null;
     }
 
-    private void processNextStep() throws JSONException {
+    private void processNextStep() throws Exception {
         currentStep = getNextStep();
         switch (currentStep) {
             case Idle:
@@ -516,7 +512,7 @@ public class SyncClient extends Activity {
                 endServerSync();
                 break;
             case SyncFinished:
-                onSyncEnd();
+                _onSyncEnd();
                 break;
         }
     }
@@ -601,7 +597,7 @@ public class SyncClient extends Activity {
         connector.resumeChangesDetection();
     }
 
-    private void authenticate() throws JSONException {
+    private void authenticate() throws Exception {
         currentStep = Steps.PromptingAuthentication;
         if (isAuthenticated() || getCredentials()) {
             if (isAuthenticated())
@@ -676,13 +672,15 @@ public class SyncClient extends Activity {
                     sync();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
         syncThread.start();
     }
 
-    public void sync() throws JSONException {
+    public void sync() throws Exception {
         currentChanges = null;      // reset changes to be sent
         lastSyncFailed = false;
         authenticate();
@@ -694,6 +692,11 @@ public class SyncClient extends Activity {
     //////////////////////////
     public static void showSyncButton(Activity activity) {
         showSyncButton(activity, -1, -1, -1);
+    }
+
+    public static void showSyncButton(Activity activity, Runnable syncEndCallback) {
+        showSyncButton(activity, -1, -1, -1);
+        SyncClient.onSyncEnd = syncEndCallback;
     }
 
     private ButtonStatus getButtonStatus() {
@@ -762,7 +765,7 @@ public class SyncClient extends Activity {
             rootView = (ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content);
         return rootView;
     }
-
+/*
     private static ViewGroup getSrcRootView() {
         return getActivityRootView(srcActivity);
     }
@@ -770,7 +773,7 @@ public class SyncClient extends Activity {
     private View getSrcCurrentView() {
         return getSrcRootView().getChildAt(0);
     }
-
+*/
     private String translate(String s) {
         return s;
     }
@@ -888,13 +891,16 @@ public class SyncClient extends Activity {
     ////////////////////
     // Sync functions //
     ////////////////////
-    private void onSyncEnd() {
+    private void _onSyncEnd() throws Exception {
         if (syncType == SyncType.FullSync)
             recomputeModifiedTables();
         currentStep = Steps.Idle;
         lastSyncFailed = false;
         updateSyncButton();
         showAlert("Sync ended successfully");
+        if ( onSyncEnd != null )
+            //onSyncEnd.run();
+            runOnUiThread(onSyncEnd);
     }
 
     /////////////////////////
