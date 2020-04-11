@@ -561,7 +561,7 @@ public class SyncClient extends Activity {
                 }
                 break;
             case RequestingSyncProfile:
-                JSONObject syncRules = data.getJSONObject("syncRules");
+                JSONObject syncRules = data;
                 Log.d(TAG, "Sync rules received: " + syncRules.toString());
                 cacheSyncProfile(syncRules);
                 break;
